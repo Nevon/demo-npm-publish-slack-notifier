@@ -9,6 +9,7 @@ const kafka = {
       ? {
           username: process.env.KAFKA_USERNAME,
           password: process.env.KAFKA_PASSWORD,
+          mechanism: 'plain'
         }
       : null,
 };
