@@ -1,0 +1,60 @@
+#!/usr/bin/env node
+
+const http = require('http')
+const path = require('path')
+const fs = require('fs')
+const crypto = require('crypto')
+
+const url = process.argv[2]
+const secret = process.argv[3]
+const payloadPath = process.argv[4]
+
+const help = () => {
+    console.log(`${path.basename(__filename)} <url> <secret> ./path/to/payload.json`)
+}
+
+if (!secret || !payloadPath) {
+    help()
+    process.exit(1)
+}
+
+const file = fs.readFileSync(payloadPath)
+const signature = crypto.createHmac('sha256', secret).update(file).digest('hex')
+const send = async () => {
+    return new Promise((resolve, reject) => {
+        const req = http.request(url, {
+            headers: {
+                'Content-Type': 'application/json',
+                'x-npm-signature': `sha256=${signature}`
+            },
+            method: 'POST'
+        }, res => {
+            if (res.statusCode >= 400) {
+                reject(new Error(`Server returned statusCode ${res.statusCode}: ${res.statusMessage}`))
+            } else {
+                res.setEncoding('utf-8')
+                let body = ''
+                res.on('data', chunk => body += chunk)
+                res.on('end', () => {
+                    console.log(body)
+                    resolve()
+                })
+            }
+        })
+
+        req.on('error', error => {
+            reject(error)
+        })
+
+        req.write(file)
+
+        req.end()
+    })
+}
+
+send().then(() => {
+    process.exit(0)
+}).catch(error => {
+    console.error('Error making request', error)
+    process.exit(1)
+})

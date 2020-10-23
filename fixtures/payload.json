@@ -1,0 +1,14 @@
+{ 
+    "event": "package:publish",
+    "name": "@kafkajs/zstd",
+    "type": "package",
+    "version": "1.0.0",
+    "hookOwner": { "username": "nevon"},
+    "payload": {
+        "name": "@kafkajs/zstd"
+    },
+    "change": {
+        "version": "1.0.0"
+    },
+    "time": 1603444214995
+}

@@ -1,0 +1,28 @@
+{
+  "name": "npm-slack-notifier",
+  "version": "0.1.0",
+  "description": "Demo KafkaJS application to notify Slack webhook on NPM package releases",
+  "main": "src/index.js",
+  "private": true,
+  "scripts": {
+    "start": "(trap 'kill 0' SIGINT; npm run start:server & npm run start:consumer)",
+    "start:server": "node src/server/index.js",
+    "start:consumer": "node src/consumer/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Nevon/demo-slack-npm-notifier.git"
+  },
+  "author": "Tommy Brunn <tommy.brunn@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Nevon/demo-slack-npm-notifier/issues"
+  },
+  "homepage": "https://github.com/Nevon/demo-slack-npm-notifier#readme",
+  "dependencies": {
+    "@slack/webhook": "^5.0.3",
+    "kafkajs": "^1.14.0",
+    "npm-hook-receiver": "^1.0.0"
+  }
+}
